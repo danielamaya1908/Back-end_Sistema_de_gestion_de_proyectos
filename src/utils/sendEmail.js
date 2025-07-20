@@ -8,6 +8,9 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+/**
+ * Envía email de verificación para registro de usuario
+ */
 export const sendWelcomeVerificationEmail = async ({
   to,
   name,
@@ -36,6 +39,45 @@ export const sendWelcomeVerificationEmail = async ({
   try {
     await transporter.sendMail(mailOptions);
   } catch (error) {
-    console.error("❌ Error enviando el correo:", error.message);
+    console.error(
+      "❌ Error enviando el correo de verificación:",
+      error.message
+    );
+  }
+};
+
+/**
+ * Envía email para recuperación de contraseña
+ */
+export const sendPasswordResetEmail = async ({ to, name, resetCode }) => {
+  const subject = "Recuperación de Contraseña - Gestión de Proyectos";
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto;">
+      <h2>Hola ${name},</h2>
+      <p>Recibiste este correo porque solicitaste restablecer tu contraseña en <strong>Gestión de Proyectos</strong>.</p>
+      <p>Tu código de recuperación es:</p>
+      <h3 style="background-color: #f2f2f2; padding: 10px; display: inline-block;">${resetCode}</h3>
+      <p><strong>⚠️ Este código expirará en 1 hora.</strong></p>
+      <p>Si no solicitaste este cambio, ignora este mensaje.</p>
+      <br/>
+      <p>Saludos,<br/>Equipo de Gestión de Proyectos</p>
+    </div>
+  `;
+
+  const mailOptions = {
+    from: `"Recuperación de Contraseña" <gestiondeproyectos07@gmail.com>`,
+    to,
+    subject,
+    html,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.error(
+      "❌ Error enviando el correo de recuperación:",
+      error.message
+    );
+    throw error; // Opcional: Propaga el error para manejarlo en el servicio
   }
 };

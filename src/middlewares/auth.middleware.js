@@ -1,5 +1,6 @@
-import jwt from "jsonwebtoken"; // asegúrate de importar bien esto
+import jwt from "jsonwebtoken";
 
+// Middleware de verificación de token (existente)
 export const verifyToken = (req, res, next) => {
   const token = req.headers["session_token"];
 
@@ -8,11 +9,33 @@ export const verifyToken = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET); // asegúrate de que JWT_SECRET está definido
-    req.user = decoded; // contiene { id, email, ... } según lo que firmaste
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
     next();
   } catch (error) {
-    console.error("Error al verificar token:", error.message); // imprime el error exacto
+    console.error("Error al verificar token:", error.message);
     return res.status(401).json({ message: "Token inválido" });
   }
+};
+
+// Middleware de autorización de roles (existente)
+export const authorizeRoles = (...allowedRoles) => {
+  return (req, res, next) => {
+    const userRole = req.user?.role?.toLowerCase();
+    console.log("🎯 Rol del usuario normalizado:", userRole);
+
+    if (!allowedRoles.map((r) => r.toLowerCase()).includes(userRole)) {
+      return res
+        .status(403)
+        .json({ message: "Acceso denegado: rol insuficiente" });
+    }
+
+    next();
+  };
+};
+
+// Asegúrate de exportar ambos middlewares
+export default {
+  verifyToken,
+  authorizeRoles,
 };

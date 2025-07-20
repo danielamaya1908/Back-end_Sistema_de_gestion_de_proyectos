@@ -1,28 +1,30 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
+import { v4 as uuidv4 } from "uuid";
 
-const ProjectSchema = new mongoose.Schema({
-  projectName: {
-    type: String,
-    required: true,
-    trim: true,
+const projectSchema = new mongoose.Schema(
+  {
+    _id: { type: String, default: uuidv4 },
+    name: { type: String, required: true },
+    description: { type: String },
+    status: {
+      type: String,
+      enum: ["planning", "in_progress", "completed", "cancelled"],
+      default: "planning",
+    },
+    priority: {
+      type: String,
+      enum: ["low", "medium", "high"],
+      default: "medium",
+    },
+    startDate: { type: Date },
+    endDate: { type: Date },
+    managerId: { type: String, ref: "User" },
+    developersIds: [{ type: String, ref: "User" }],
   },
-  projectType: {
-    type: String,
-    required: true,
-  },
-  projectBudget: {
-    type: Number,
-    required: true,
-  },
-  createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
-  creationDate: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  {
+    timestamps: { createdAt: true, updatedAt: false },
+    _id: false,
+  }
+);
 
-module.exports = mongoose.model("Project", ProjectSchema);
+export const Project = mongoose.model("Project", projectSchema);

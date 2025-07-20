@@ -25,6 +25,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ["admin", "manager", "developer"],
       default: "developer",
+      lowercase: true, // 👈 transforma automáticamente a minúsculas
     },
     avatar: {
       type: String,
@@ -43,8 +44,19 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+    passwordResetCode: {
+      type: String,
+      default: null, // Similar a verificationCode
+    },
+    passwordResetExpires: {
+      type: Date,
+      default: null, // Similar a los timestamps existentes
+    },
   },
-
   {
     timestamps: { createdAt: true, updatedAt: false },
     _id: false,

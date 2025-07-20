@@ -5,6 +5,9 @@ import {
   getProfile,
   refreshToken,
   verifyUser,
+  requestPasswordReset,
+  verifyResetCode,
+  resetPassword,
 } from "../controllers/authController.js";
 
 import {
@@ -31,5 +34,9 @@ router.post("/verify", verifyUser);
 
 // Ruta protegida, ahora usa 'session_token' en headers
 router.get("/profile", verifyToken, getProfile);
+
+router.post("/password/reset-request", requestPasswordReset);
+router.post("/password/verify-code", verifyResetCode);
+router.post("/password/reset", resetPassword);
 
 export default router;

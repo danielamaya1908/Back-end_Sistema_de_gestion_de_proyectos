@@ -4,6 +4,9 @@ import {
   loginUserService,
   getProfileService,
   refreshTokenService,
+  resetPasswordService,
+  requestPasswordResetService,
+  verifyResetCodeService,
 } from "../services/auth.service.js";
 import { User } from "../models/User.js";
 
@@ -76,5 +79,47 @@ export const verifyUser = async (req, res) => {
   } catch (error) {
     console.error("❌ Error verificando código:", error);
     return res.status(500).json({ message: "Error al verificar la cuenta." });
+  }
+};
+
+// 1. Solicitar recuperación
+export const requestPasswordReset = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const result = await requestPasswordResetService(email);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// 2. Verificar código
+export const verifyResetCode = async (req, res) => {
+  try {
+    const { email, code } = req.body;
+    const result = await verifyResetCodeService(email, code);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// 3. Actualizar contraseña
+export const resetPassword = async (req, res) => {
+  try {
+    const { email, code, newPassword } = req.body;
+    const result = await resetPasswordService(email, code, newPassword);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
