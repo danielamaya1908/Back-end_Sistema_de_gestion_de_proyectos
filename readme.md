@@ -143,4 +143,4 @@ yarn test:coverage
 
 ---
 
-**Licencia MIT** © 2023 - [Ver licencia completa](LICENSE)
+**Licencia MIT** © 2025- Daniel Amaya
