@@ -64,7 +64,7 @@ export const loginUserService = async ({ email, password }) => {
   const payload = { id: user._id, role: user.role };
 
   const token = jwt.sign(payload, process.env.JWT_SECRET, {
-    expiresIn: "15m",
+    expiresIn: "60m",
   });
 
   const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {
