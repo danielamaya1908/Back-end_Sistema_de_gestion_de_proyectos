@@ -34,7 +34,6 @@ export const getDashboardMetrics = async (req, res) => {
 
 export const getProjectMetrics = async (req, res) => {
   try {
-    // Ahora obtenemos projectId del body en lugar de params
     const { projectId } = req.body;
 
     if (!projectId) {
@@ -58,7 +57,6 @@ export const getProjectMetrics = async (req, res) => {
     const metrics = await getProjectMetricsService(projectId);
     res.status(200).json(metrics);
   } catch (error) {
-    console.error("Error en getProjectMetrics:", error);
     res.status(500).json({
       success: false,
       message: "Error al obtener métricas del proyecto",

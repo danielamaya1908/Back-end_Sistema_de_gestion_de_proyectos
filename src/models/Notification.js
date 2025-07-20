@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const notificationSchema = new mongoose.Schema(
   {
-    userId: { type: String, ref: "User", required: true }, // Destinatario
+    userId: { type: String, ref: "User", required: true },
     type: {
       type: String,
       enum: [
@@ -14,10 +14,10 @@ const notificationSchema = new mongoose.Schema(
       required: true,
     },
     message: { type: String, required: true },
-    relatedTask: { type: String, ref: "Task" }, // Opcional: ID de tarea relacionada
-    relatedProject: { type: String, ref: "Project" }, // Opcional: ID de proyecto
+    relatedTask: { type: String, ref: "Task" },
+    relatedProject: { type: String, ref: "Project" },
     isRead: { type: Boolean, default: false },
-    metadata: { type: Object }, // Datos adicionales (ej: { oldStatus: "todo", newStatus: "in_progress" })
+    metadata: { type: Object },
   },
   { timestamps: true }
 );

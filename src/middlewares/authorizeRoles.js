@@ -1,7 +1,6 @@
 export function authorizeRoles(...allowedRoles) {
   return (req, res, next) => {
-    const userRole = req.user?.role?.toLowerCase(); // 👈 forzamos minúsculas
-    console.log("🎯 Rol del usuario normalizado:", userRole);
+    const userRole = req.user?.role?.toLowerCase();
 
     if (!allowedRoles.map((r) => r.toLowerCase()).includes(userRole)) {
       return res

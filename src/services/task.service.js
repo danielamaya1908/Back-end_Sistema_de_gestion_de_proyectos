@@ -3,9 +3,6 @@ import { Project } from "../models/Project.js";
 import { User } from "../models/User.js";
 import { notifyUser, notifyProjectTeam } from "./notification.service.js";
 
-/**
- * Obtiene todas las tareas con filtros basados en el modelo y paginación
- */
 export const getAllTasksService = async (filters = {}) => {
   const {
     page = 1,
@@ -27,9 +24,8 @@ export const getAllTasksService = async (filters = {}) => {
   } = filters;
 
   const skip = (page - 1) * limit;
-  const query = { isDeleted: { $ne: true } }; // Filtro para soft delete
+  const query = { isDeleted: { $ne: true } };
 
-  // 🔍 Búsqueda por título o descripción (insensible a mayúsculas)
   if (search) {
     query.$or = [
       { title: { $regex: search, $options: "i" } },
@@ -37,14 +33,12 @@ export const getAllTasksService = async (filters = {}) => {
     ];
   }
 
-  // ✅ Filtros exactos (según campos del modelo)
   if (status) query.status = status;
   if (priority) query.priority = priority;
   if (assignedTo) query.assignedTo = assignedTo;
   if (projectId) query.projectId = projectId;
   if (createdBy) query.createdBy = createdBy;
 
-  // 🔢 Filtros por rango de horas estimadas
   if (estimatedHoursMin || estimatedHoursMax) {
     query.estimatedHours = {};
     if (estimatedHoursMin)
@@ -53,32 +47,28 @@ export const getAllTasksService = async (filters = {}) => {
       query.estimatedHours.$lte = Number(estimatedHoursMax);
   }
 
-  // 🔢 Filtros por rango de horas reales
   if (actualHoursMin || actualHoursMax) {
     query.actualHours = {};
     if (actualHoursMin) query.actualHours.$gte = Number(actualHoursMin);
     if (actualHoursMax) query.actualHours.$lte = Number(actualHoursMax);
   }
 
-  // 📅 Filtros por fecha límite (dueDate)
   if (dueDateStart || dueDateEnd) {
     query.dueDate = {};
     if (dueDateStart) query.dueDate.$gte = new Date(dueDateStart);
     if (dueDateEnd) query.dueDate.$lte = new Date(dueDateEnd);
   }
 
-  // 🧭 Ordenamiento (por defecto: createdAt descendente)
   const sortOption = { [sortBy]: sortOrder === "asc" ? 1 : -1 };
 
-  // ⚡ Consulta eficiente con Promise.all
   const [tasks, total] = await Promise.all([
     Task.find(query)
       .sort(sortOption)
       .skip(skip)
       .limit(limit)
-      .populate("assignedTo", "name email") // Populate del usuario asignado
-      .populate("createdBy", "name email") // Populate del creador
-      .populate("projectId", "name"), // Populate del proyecto
+      .populate("assignedTo", "name email")
+      .populate("createdBy", "name email")
+      .populate("projectId", "name"),
     Task.countDocuments(query),
   ]);
 
@@ -93,22 +83,16 @@ export const getAllTasksService = async (filters = {}) => {
   };
 };
 
-/**
- * Obtiene todas las tareas de un proyecto (con validación de existencia del proyecto)
- */
 export const getTasksByProjectService = async (projectId) => {
   const projectExists = await Project.findById(projectId);
   if (!projectExists) throw new Error("Proyecto no encontrado");
 
   return await Task.find({
     projectId,
-    isDeleted: { $ne: true }, // Filtro para soft delete
+    isDeleted: { $ne: true },
   });
 };
 
-/**
- * Obtiene una tarea específica por ID (con validación de existencia)
- */
 export const getTaskByIdService = async (taskId) => {
   const task = await Task.findOne({
     _id: taskId,
@@ -119,22 +103,13 @@ export const getTaskByIdService = async (taskId) => {
   return task;
 };
 
-/**
- * Crea una nueva tarea con validaciones:
- * 1. Proyecto existe
- * 2. Usuario asignado existe
- * 3. Campos obligatorios
- */
 export const createTaskService = async (projectId, taskData, createdBy) => {
-  // Validar proyecto
   const project = await Project.findById(projectId);
   if (!project) throw new Error("Proyecto no encontrado");
 
-  // Validar usuario asignado
   const assignedUser = await User.findById(taskData.assignedTo);
   if (!assignedUser) throw new Error("Usuario asignado no encontrado");
 
-  // Validar fechas
   if (taskData.dueDate && new Date(taskData.dueDate) < new Date()) {
     throw new Error("La fecha límite no puede ser en el pasado");
   }
@@ -143,19 +118,15 @@ export const createTaskService = async (projectId, taskData, createdBy) => {
     ...taskData,
     projectId,
     createdBy,
-    status: "todo", // Valor por defecto
-    actualHours: 0, // Valor por defecto
+    status: "todo",
+    actualHours: 0,
   });
 };
 
-/**
- * Actualiza una tarea existente (con validación de existencia)
- */
 export const updateTaskService = async (taskId, updates) => {
   const task = await Task.findById(taskId);
   if (!task) throw new Error("Tarea no encontrada");
 
-  // Evitar actualización de campos protegidos
   const protectedFields = ["_id", "projectId", "createdBy"];
   protectedFields.forEach((field) => delete updates[field]);
 
@@ -169,10 +140,10 @@ export const deleteTaskService = async (taskId, deleteType = "soft") => {
   if (!task) throw new Error("Tarea no encontrada");
 
   if (deleteType === "hard") {
-    await Task.findByIdAndDelete(taskId); // Hard delete (borrado físico)
+    await Task.findByIdAndDelete(taskId);
     return { deleted: true, method: "hard" };
   } else {
-    task.isDeleted = true; // Soft delete (marcado como eliminado)
+    task.isDeleted = true;
     await task.save();
     return { deleted: true, method: "soft" };
   }
@@ -185,7 +156,6 @@ export const assignTaskService = async (taskId, assignedTo) => {
     { new: true }
   ).populate("assignedTo", "name");
 
-  // Notificar al developer
   await notifyUser(assignedTo, {
     type: "TASK_ASSIGNED",
     message: `Tienes una nueva tarea: "${task.title}"`,
@@ -203,7 +173,6 @@ export const updateTaskStatusService = async (taskId, newStatus) => {
   task.status = newStatus;
   await task.save();
 
-  // Notificar al developer y al manager
   await notifyProjectTeam(task.projectId, {
     type: "TASK_UPDATED",
     message: `Tarea "${task.title}" cambió de ${oldStatus} a ${newStatus}`,

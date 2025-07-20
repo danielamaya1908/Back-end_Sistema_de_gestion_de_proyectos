@@ -1,4 +1,3 @@
-// src/validators/auth.validator.js
 import { body } from "express-validator";
 
 export const validateLogin = [

@@ -42,67 +42,61 @@ export const getDashboardMetricsService = async (userId, userRole) => {
 };
 
 export const getProjectMetricsService = async (projectId) => {
-  try {
-    const [
-      tasksByStatus,
-      tasksByPriority,
-      hoursComparison,
-      overdueTasks,
-      teamPerformance,
-    ] = await Promise.all([
-      Task.aggregate([
-        { $match: { projectId, isDeleted: { $ne: true } } },
-        { $group: { _id: "$status", count: { $sum: 1 } } },
-        { $project: { status: "$_id", count: 1, _id: 0 } },
-      ]),
-      Task.aggregate([
-        { $match: { projectId, isDeleted: { $ne: true } } },
-        { $group: { _id: "$priority", count: { $sum: 1 } } },
-        { $project: { priority: "$_id", count: 1, _id: 0 } },
-      ]),
-      Task.aggregate([
-        {
-          $match: {
-            projectId,
-            isDeleted: { $ne: true },
-            estimatedHours: { $exists: true },
-          },
+  const [
+    tasksByStatus,
+    tasksByPriority,
+    hoursComparison,
+    overdueTasks,
+    teamPerformance,
+  ] = await Promise.all([
+    Task.aggregate([
+      { $match: { projectId, isDeleted: { $ne: true } } },
+      { $group: { _id: "$status", count: { $sum: 1 } } },
+      { $project: { status: "$_id", count: 1, _id: 0 } },
+    ]),
+    Task.aggregate([
+      { $match: { projectId, isDeleted: { $ne: true } } },
+      { $group: { _id: "$priority", count: { $sum: 1 } } },
+      { $project: { priority: "$_id", count: 1, _id: 0 } },
+    ]),
+    Task.aggregate([
+      {
+        $match: {
+          projectId,
+          isDeleted: { $ne: true },
+          estimatedHours: { $exists: true },
         },
-        {
-          $group: {
-            _id: null,
-            totalEstimated: { $sum: "$estimatedHours" },
-            totalActual: { $sum: "$actualHours" },
-          },
-        },
-      ]),
-      // Versión corregida del countDocuments
-      Task.countDocuments({
-        projectId,
-        dueDate: { $lt: new Date() },
-        status: { $not: { $in: ["done", "cancelled"] } },
-        isDeleted: { $ne: true },
-      }),
-      getTeamPerformanceMetrics(projectId),
-    ]);
-
-    return {
-      tasksByStatus: formatStatusData(tasksByStatus, "tasks"),
-      tasksByPriority: formatPriorityData(tasksByPriority),
-      hoursComparison: {
-        estimated: hoursComparison[0]?.totalEstimated || 0,
-        actual: hoursComparison[0]?.totalActual || 0,
-        difference:
-          (hoursComparison[0]?.totalEstimated || 0) -
-          (hoursComparison[0]?.totalActual || 0),
       },
-      overdueTasks,
-      teamPerformance,
-    };
-  } catch (error) {
-    console.error("Error en getProjectMetricsService:", error);
-    throw error;
-  }
+      {
+        $group: {
+          _id: null,
+          totalEstimated: { $sum: "$estimatedHours" },
+          totalActual: { $sum: "$actualHours" },
+        },
+      },
+    ]),
+    Task.countDocuments({
+      projectId,
+      dueDate: { $lt: new Date() },
+      status: { $nin: ["done", "cancelled"] },
+      isDeleted: { $ne: true },
+    }),
+    getTeamPerformanceMetrics(projectId),
+  ]);
+
+  return {
+    tasksByStatus: formatStatusData(tasksByStatus, "tasks"),
+    tasksByPriority: formatPriorityData(tasksByPriority),
+    hoursComparison: {
+      estimated: hoursComparison[0]?.totalEstimated || 0,
+      actual: hoursComparison[0]?.totalActual || 0,
+      difference:
+        (hoursComparison[0]?.totalEstimated || 0) -
+        (hoursComparison[0]?.totalActual || 0),
+    },
+    overdueTasks,
+    teamPerformance,
+  };
 };
 
 function getProjectsByStatus(userId, userRole) {
@@ -139,7 +133,9 @@ function getTasksByPriority(baseQuery) {
 
 function getHoursComparison(baseQuery) {
   return Task.aggregate([
-    { $match: { ...baseQuery, estimatedHours: { $exists: true } } },
+    {
+      $match: { ...baseQuery, estimatedHours: { $exists: true } },
+    },
     {
       $group: {
         _id: null,
@@ -167,7 +163,7 @@ function getUserTaskMetrics(userId) {
         totalTasks: { $sum: 1 },
         completedTasks: {
           $sum: { $cond: [{ $eq: ["$status", "done"] }, 1, 0] },
-        }, // Se cerró el $cond y el $sum que faltaban
+        },
         overdueTasks: {
           $sum: {
             $cond: [
@@ -254,26 +250,17 @@ function formatStatusData(data, type) {
       ? ["planning", "in_progress", "completed", "cancelled"]
       : ["todo", "in_progress", "review", "done"];
 
-  const result = defaultStatuses.map((status) => ({
+  return defaultStatuses.map((status) => ({
     status,
-    count: 0,
+    count: data.find((item) => item.status === status)?.count || 0,
   }));
-
-  data.forEach((item) => {
-    const found = result.find((i) => i.status === item.status);
-    if (found) found.count = item.count;
-  });
-
-  return result;
 }
 
 function formatPriorityData(data) {
   const priorities = ["low", "medium", "high"];
 
-  const result = priorities.map((priority) => ({
+  return priorities.map((priority) => ({
     priority,
     count: data.find((item) => item.priority === priority)?.count || 0,
   }));
-
-  return result;
 }

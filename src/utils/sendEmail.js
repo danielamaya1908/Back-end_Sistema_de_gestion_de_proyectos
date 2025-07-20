@@ -8,9 +8,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-/**
- * Envía email de verificación para registro de usuario
- */
 export const sendWelcomeVerificationEmail = async ({
   to,
   name,
@@ -46,9 +43,6 @@ export const sendWelcomeVerificationEmail = async ({
   }
 };
 
-/**
- * Envía email para recuperación de contraseña
- */
 export const sendPasswordResetEmail = async ({ to, name, resetCode }) => {
   const subject = "Recuperación de Contraseña - Gestión de Proyectos";
   const html = `
@@ -78,6 +72,6 @@ export const sendPasswordResetEmail = async ({ to, name, resetCode }) => {
       "❌ Error enviando el correo de recuperación:",
       error.message
     );
-    throw error; // Opcional: Propaga el error para manejarlo en el servicio
+    throw error;
   }
 };

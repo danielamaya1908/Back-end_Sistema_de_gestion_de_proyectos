@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 
-// Middleware de verificación de token (existente)
 export const verifyToken = (req, res, next) => {
   const token = req.headers["session_token"];
 
@@ -13,16 +12,13 @@ export const verifyToken = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (error) {
-    console.error("Error al verificar token:", error.message);
     return res.status(401).json({ message: "Token inválido" });
   }
 };
 
-// Middleware de autorización de roles (existente)
 export const authorizeRoles = (...allowedRoles) => {
   return (req, res, next) => {
     const userRole = req.user?.role?.toLowerCase();
-    console.log("🎯 Rol del usuario normalizado:", userRole);
 
     if (!allowedRoles.map((r) => r.toLowerCase()).includes(userRole)) {
       return res
@@ -34,7 +30,6 @@ export const authorizeRoles = (...allowedRoles) => {
   };
 };
 
-// Asegúrate de exportar ambos middlewares
 export default {
   verifyToken,
   authorizeRoles,

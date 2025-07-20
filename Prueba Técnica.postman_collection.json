@@ -1,0 +1,802 @@
+{
+	"info": {
+		"_postman_id": "7e299535-f772-4769-9c1d-d9177e49359a",
+		"name": "Prueba Técnica",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29368427",
+		"_collection_link": "https://daniel-amaya.postman.co/workspace/fb3416e0-7664-41b7-a54e-916ee680ac7e/collection/29368427-7e299535-f772-4769-9c1d-d9177e49359a?action=share&source=collection_link&creator=29368427"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Gestion de Proyectos\",\n  \"email\": \"gestiondeproyectos07@gmail.com\",\n  \"password\": \"GestionProyectos123@\",\n  \"role\": \"Admin\",\n  \"avatar\": \"\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://back-endsistemadegestiondeproyectos-production.up.railway.app/api/auth/register",
+							"protocol": "https",
+							"host": [
+								"back-endsistemadegestiondeproyectos-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"gestiondeproyectos07@gmail.com\",\n  \"code\": \"130214\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://back-endsistemadegestiondeproyectos-production.up.railway.app/api/auth/verify",
+							"protocol": "https",
+							"host": [
+								"back-endsistemadegestiondeproyectos-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"auth",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Password-Reset",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "session_token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRjMjY0ZGYyLWJkNTItNGY3Ni1iYWU5LWEzZjFjY2I5ZmNmZCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1Mjk2MzI3OSwiZXhwIjoxNzUyOTY0MTc5fQ.f3tbzLysBqmvPhpIeEcmCdYSjTW_8GJhH7Y6SSrT6Qo",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"danijcdm.com@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://back-endsistemadegestiondeproyectos-production.up.railway.app/api/auth/password/reset-request",
+							"protocol": "https",
+							"host": [
+								"back-endsistemadegestiondeproyectos-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"auth",
+								"password",
+								"reset-request"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Password-Verify-Code",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "session_token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRjMjY0ZGYyLWJkNTItNGY3Ni1iYWU5LWEzZjFjY2I5ZmNmZCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1Mjk2MzI3OSwiZXhwIjoxNzUyOTY0MTc5fQ.f3tbzLysBqmvPhpIeEcmCdYSjTW_8GJhH7Y6SSrT6Qo",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"danijcdm.com@gmail.com\",\n    \"code\": \"100033\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://back-endsistemadegestiondeproyectos-production.up.railway.app/api/auth/password/verify-code",
+							"protocol": "https",
+							"host": [
+								"back-endsistemadegestiondeproyectos-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"auth",
+								"password",
+								"verify-code"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Password-Reset",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "session_token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRjMjY0ZGYyLWJkNTItNGY3Ni1iYWU5LWEzZjFjY2I5ZmNmZCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1Mjk2MzI3OSwiZXhwIjoxNzUyOTY0MTc5fQ.f3tbzLysBqmvPhpIeEcmCdYSjTW_8GJhH7Y6SSrT6Qo",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"danijcdm.com@gmail.com\",\n    \"code\": \"100033\",\n    \"newPassword\": \"123456@\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://back-endsistemadegestiondeproyectos-production.up.railway.app/api/auth/password/reset",
+							"protocol": "https",
+							"host": [
+								"back-endsistemadegestiondeproyectos-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"auth",
+								"password",
+								"reset"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"gestiondeproyectos07@gmail.com\",\n  \"password\": \"GestionProyectos123@\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://back-endsistemadegestiondeproyectos-production.up.railway.app/api/auth/login",
+							"protocol": "https",
+							"host": [
+								"back-endsistemadegestiondeproyectos-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Profile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4N2I1MjU1YzUyYWI1NDgyMDZiMTUwYSIsImlhdCI6MTc1MjkxMzAwMywiZXhwIjoxNzUyOTk5NDAzfQ.Gh9bI5VxfdrWKuaz8EwvfNKGngfTZWljYcTw56KXx8o",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "session_token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVkNzVjZThlLWNjOTYtNGRjNi1iMmEyLWUzNTc0NTY1ZmY1MCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1Mjk3MzI1MCwiZXhwIjoxNzUyOTc0MTUwfQ.yg30cYi4prQp61APH9u8w1quiLY68CtR2_nmNYJzcgA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://back-endsistemadegestiondeproyectos-production.up.railway.app/api/auth/profile",
+							"protocol": "https",
+							"host": [
+								"back-endsistemadegestiondeproyectos-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"auth",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Projects",
+			"item": []
+		},
+		{
+			"name": "User/Desarrollador",
+			"item": [
+				{
+					"name": "Get All Users/Desarrolladores",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "session_token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVkNzVjZThlLWNjOTYtNGRjNi1iMmEyLWUzNTc0NTY1ZmY1MCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1Mjk3MzYwNSwiZXhwIjoxNzUyOTc0NTA1fQ.ShWsyGPxGspCntETjGHxeydf8lUH5J0ZuZzA7d_8SNI",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"page\": 1 //, //Filtra por página\n    //\"role\": \"admin\",//Filtra por rol\n    //\"search\": \"Daniel\",//Filtra por name, email\n    //\"isVerified\": true,//Filtra por cuenta verificada\n    //\"sortOrder\": \"desc\",//Filtra por asc o desc\n    //\"sortBy\": \"name\"// filtra por name, rol, email o createdAt\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://back-endsistemadegestiondeproyectos-production.up.railway.app/api/users/getAll",
+							"protocol": "https",
+							"host": [
+								"back-endsistemadegestiondeproyectos-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"users",
+								"getAll"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Users/Desarrolladores",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "session_token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVkNzVjZThlLWNjOTYtNGRjNi1iMmEyLWUzNTc0NTY1ZmY1MCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1Mjk3MzYwNSwiZXhwIjoxNzUyOTc0NTA1fQ.ShWsyGPxGspCntETjGHxeydf8lUH5J0ZuZzA7d_8SNI",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Daniel Amaya\",\n  \"email\": \"danijcdm.com@gmail.com\",\n  \"password\": \"GestionProyectos123@\",\n  \"role\": \"Developer\",\n  \"avatar\": \"\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://back-endsistemadegestiondeproyectos-production.up.railway.app/api/users/create",
+							"protocol": "https",
+							"host": [
+								"back-endsistemadegestiondeproyectos-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"users",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get ById Users/Desarrolladores",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "session_token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRjMjY0ZGYyLWJkNTItNGY3Ni1iYWU5LWEzZjFjY2I5ZmNmZCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1MjkyOTAzNSwiZXhwIjoxNzUyOTI5OTM1fQ.RcpA_JCacXRbLG2v3ORuNcVGj5oCmWfXpZ1chWQIN5s",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"0cf7abde-25b4-4b6a-8576-9e36f78fd845\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://back-endsistemadegestiondeproyectos-production.up.railway.app/api/users/getById",
+							"protocol": "https",
+							"host": [
+								"back-endsistemadegestiondeproyectos-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"users",
+								"getById"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put Users/Desarrolladores",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "session_token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRjMjY0ZGYyLWJkNTItNGY3Ni1iYWU5LWEzZjFjY2I5ZmNmZCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1MjkyOTAzNSwiZXhwIjoxNzUyOTI5OTM1fQ.RcpA_JCacXRbLG2v3ORuNcVGj5oCmWfXpZ1chWQIN5s",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"0cf7abde-25b4-4b6a-8576-9e36f78fd845\",\n  \"name\": \"Manuel Barrios\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://back-endsistemadegestiondeproyectos-production.up.railway.app/api/users/put",
+							"protocol": "https",
+							"host": [
+								"back-endsistemadegestiondeproyectos-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"users",
+								"put"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Users/Desarrolladores",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "session_token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRjMjY0ZGYyLWJkNTItNGY3Ni1iYWU5LWEzZjFjY2I5ZmNmZCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1Mjk2MTUzNCwiZXhwIjoxNzUyOTYyNDM0fQ._GEXhGxoWdNuw3JQxYTxVkq1zvvTKPEj3RA5nY0BRzc",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"f873fe7a-fddc-416f-a838-dd06e65bfdfd\",\n  \"deleteType\": \"hard\"  // hard o soft-Opcional (por defecto)\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://back-endsistemadegestiondeproyectos-production.up.railway.app/api/users/delete",
+							"protocol": "https",
+							"host": [
+								"back-endsistemadegestiondeproyectos-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"users",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Task",
+			"item": [
+				{
+					"name": "Get Projects-Task",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "session_token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRjMjY0ZGYyLWJkNTItNGY3Ni1iYWU5LWEzZjFjY2I5ZmNmZCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1Mjk2MDYyNCwiZXhwIjoxNzUyOTYxNTI0fQ.8np7G2Ii9bu_seni44VcUB2tEFFQ5Iljnd7dVbsHBxA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"projectId\": \"f787a860-bfc4-4df1-a0e4-3a41d952941f\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://back-endsistemadegestiondeproyectos-production.up.railway.app/api/tasks/get-by-project",
+							"protocol": "https",
+							"host": [
+								"back-endsistemadegestiondeproyectos-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"get-by-project"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Task",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "session_token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRjMjY0ZGYyLWJkNTItNGY3Ni1iYWU5LWEzZjFjY2I5ZmNmZCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1Mjk2ODgwMCwiZXhwIjoxNzUyOTY5NzAwfQ.LlsESHaWhU1QyyL7abGWgK0yKiY3KQxLxN2kESzMKiQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"page\": 1 //,\n    //\"limit\": 10,\n    // \"search\": \"dashboard\",\n    //\"status\": \"todo\", //Filtro por estado\n    //\"priority\": \"high\", //Filtro por prioridad\n    //\"assignedTo\": \"5f94d538-8c54-44e9-884b-0406a62f7a3e\" //Filtro por asignado\n    //\"projectId\": \"123e4567-e89b-12d3-a456-426614174001\",\n    //\"dueDateStart\": \"2023-06-01\",\n    //\"dueDateEnd\": \"2023-06-30\",\n    //\"sortBy\": \"createdAt\",\n    //\"sortOrder\": \"desc\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://back-endsistemadegestiondeproyectos-production.up.railway.app/api/tasks/getAll",
+							"protocol": "https",
+							"host": [
+								"back-endsistemadegestiondeproyectos-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"getAll"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Task",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "session_token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVkNzVjZThlLWNjOTYtNGRjNi1iMmEyLWUzNTc0NTY1ZmY1MCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1Mjk3MzYwNSwiZXhwIjoxNzUyOTc0NTA1fQ.ShWsyGPxGspCntETjGHxeydf8lUH5J0ZuZzA7d_8SNI",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Implementar login\",\n  \"description\": \"Crear formulario de login con validación\",\n  \"priority\": \"high\",\n  \"projectId\": \"e4f29f49-f805-41c5-b88a-85cb308888d7\",\n  \"assignedTo\": \"24ef7a48-297b-4a0e-8d6b-210d447ace76\",\n  \"estimatedHours\": 8,\n  \"dueDate\": \"2025-08-15\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://back-endsistemadegestiondeproyectos-production.up.railway.app/api/tasks/create",
+							"protocol": "https",
+							"host": [
+								"back-endsistemadegestiondeproyectos-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get ById Task",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "session_token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRjMjY0ZGYyLWJkNTItNGY3Ni1iYWU5LWEzZjFjY2I5ZmNmZCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1Mjk2MDYyNCwiZXhwIjoxNzUyOTYxNTI0fQ.8np7G2Ii9bu_seni44VcUB2tEFFQ5Iljnd7dVbsHBxA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"taskId\": \"59e9eab7-2390-4689-ae90-c5294e6a0ef7\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://back-endsistemadegestiondeproyectos-production.up.railway.app/api/tasks/getById",
+							"protocol": "https",
+							"host": [
+								"back-endsistemadegestiondeproyectos-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"getById"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put Task",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "session_token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRjMjY0ZGYyLWJkNTItNGY3Ni1iYWU5LWEzZjFjY2I5ZmNmZCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1Mjk2MDYyNCwiZXhwIjoxNzUyOTYxNTI0fQ.8np7G2Ii9bu_seni44VcUB2tEFFQ5Iljnd7dVbsHBxA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"taskId\": \"59e9eab7-2390-4689-ae90-c5294e6a0ef7\",\n  \"status\": \"review\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://back-endsistemadegestiondeproyectos-production.up.railway.app/api/tasks/put",
+							"protocol": "https",
+							"host": [
+								"back-endsistemadegestiondeproyectos-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"put"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Task",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "session_token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRjMjY0ZGYyLWJkNTItNGY3Ni1iYWU5LWEzZjFjY2I5ZmNmZCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1Mjk2MTUzNCwiZXhwIjoxNzUyOTYyNDM0fQ._GEXhGxoWdNuw3JQxYTxVkq1zvvTKPEj3RA5nY0BRzc",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"taskId\": \"a9f25e44-44f7-4b25-906a-c5c139e95ab5\",\n  \"deleteType\": \"hard\"  // hard o soft-Opcional (por defecto)\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://back-endsistemadegestiondeproyectos-production.up.railway.app/api/tasks/delete",
+							"protocol": "https",
+							"host": [
+								"back-endsistemadegestiondeproyectos-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Metrics",
+			"item": [
+				{
+					"name": "Metrics Dashboard",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "session_token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRjMjY0ZGYyLWJkNTItNGY3Ni1iYWU5LWEzZjFjY2I5ZmNmZCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1Mjk3MDQzNiwiZXhwIjoxNzUyOTcxMzM2fQ.guXmY_N20F45eqX0EK4wLF_havyZvao3-LxJuHuDguE",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://back-endsistemadegestiondeproyectos-production.up.railway.app/api/metrics/metrics",
+							"protocol": "https",
+							"host": [
+								"back-endsistemadegestiondeproyectos-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"metrics",
+								"metrics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Metrics Projects",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "session_token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRjMjY0ZGYyLWJkNTItNGY3Ni1iYWU5LWEzZjFjY2I5ZmNmZCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1Mjk3MDQzNiwiZXhwIjoxNzUyOTcxMzM2fQ.guXmY_N20F45eqX0EK4wLF_havyZvao3-LxJuHuDguE",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"projectId\": \"7f17908f-cb6a-42b3-a85a-4596cff39f10\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://back-endsistemadegestiondeproyectos-production.up.railway.app/api/metrics/project",
+							"protocol": "https",
+							"host": [
+								"back-endsistemadegestiondeproyectos-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"api",
+								"metrics",
+								"project"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

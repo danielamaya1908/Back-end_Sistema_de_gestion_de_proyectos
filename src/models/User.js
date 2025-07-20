@@ -1,4 +1,3 @@
-// src/models/user.model.js
 import mongoose from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 
@@ -25,7 +24,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ["admin", "manager", "developer"],
       default: "developer",
-      lowercase: true, // 👈 transforma automáticamente a minúsculas
+      lowercase: true,
     },
     avatar: {
       type: String,
@@ -50,11 +49,11 @@ const userSchema = new mongoose.Schema(
     },
     passwordResetCode: {
       type: String,
-      default: null, // Similar a verificationCode
+      default: null,
     },
     passwordResetExpires: {
       type: Date,
-      default: null, // Similar a los timestamps existentes
+      default: null,
     },
   },
   {

@@ -12,7 +12,6 @@ export const getAllUsers = async (req, res) => {
     const result = await getAllUsersService(req.body);
     res.status(200).json(result);
   } catch (error) {
-    console.error("Error in getAllUsers:", error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -62,7 +61,7 @@ export const updateUser = async (req, res) => {
 
 export const deleteUser = [
   verifyToken,
-  authorizeRoles("admin"), // Solo el admin puede eliminar usuarios
+  authorizeRoles("admin"),
   async (req, res) => {
     try {
       const { userId, deleteType = "soft" } = req.body;

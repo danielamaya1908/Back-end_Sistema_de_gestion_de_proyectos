@@ -10,7 +10,6 @@ import { verifyToken, authorizeRoles } from "../middlewares/auth.middleware.js";
 
 export const getAllTasks = async (req, res) => {
   try {
-    // Validar que los campos de filtro sean válidos según el modelo
     const validFilters = [
       "page",
       "limit",
@@ -73,19 +72,17 @@ export const getTaskById = async (req, res) => {
 };
 
 export const createTask = [
-  verifyToken, // Middleware 1: Verifica el token
-  authorizeRoles("admin", "manager", "developer"), // Middleware 2: Valida roles
+  verifyToken,
+  authorizeRoles("admin", "manager", "developer"),
   async (req, res) => {
     try {
       const { projectId, ...taskData } = req.body;
-      const createdBy = req.user.id; // ID del usuario autenticado
+      const createdBy = req.user.id;
 
-      // Validación básica de campos requeridos
       if (!projectId || !taskData.assignedTo) {
         return res.status(400).json({ message: "Faltan campos obligatorios" });
       }
 
-      // Llamar al servicio
       const task = await createTaskService(projectId, taskData, createdBy);
 
       res.status(201).json({
@@ -112,10 +109,10 @@ export const updateTask = async (req, res) => {
 
 export const deleteTask = [
   verifyToken,
-  authorizeRoles("admin", "manager"), // Solo roles autorizados
+  authorizeRoles("admin", "manager"),
   async (req, res) => {
     try {
-      const { taskId, deleteType = "soft" } = req.body; // Parámetro opcional (default: "soft")
+      const { taskId, deleteType = "soft" } = req.body;
 
       if (!taskId) throw new Error("taskId es requerido");
       if (!["soft", "hard"].includes(deleteType)) {

@@ -1,11 +1,9 @@
-// services/auth.service.js
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User.js";
-// Importación actualizada
 import {
   sendWelcomeVerificationEmail,
-  sendPasswordResetEmail, // 👈 Nueva función añadida
+  sendPasswordResetEmail,
 } from "../utils/sendEmail.js";
 
 export const registerUserService = async (userData) => {
@@ -19,8 +17,6 @@ export const registerUserService = async (userData) => {
   if (existingUser) throw new Error("El correo ya está registrado");
 
   const hashedPassword = await bcrypt.hash(password, 10);
-
-  // ✅ Generar código de verificación de 6 dígitos
   const verificationCode = Math.floor(
     100000 + Math.random() * 900000
   ).toString();
@@ -31,11 +27,10 @@ export const registerUserService = async (userData) => {
     password: hashedPassword,
     role,
     avatar: avatar || undefined,
-    verificationCode, // <-- Asegúrate que el modelo lo soporte
-    isVerified: false, // <- también útil si quieres marcar si ya confirmó su cuenta
+    verificationCode,
+    isVerified: false,
   });
 
-  // 📩 Enviar correo con código de verificación
   await sendWelcomeVerificationEmail({
     to: email,
     name,
@@ -62,7 +57,6 @@ export const loginUserService = async ({ email, password }) => {
     throw new Error("Credenciales inválidas");
   }
 
-  // 🚫 Bloqueo si no está verificado
   if (!user.isVerified) {
     throw new Error("Cuenta no verificada. Verifica tu correo.");
   }
@@ -120,20 +114,17 @@ export const getProfileService = async (userId) => {
   return user;
 };
 
-// 1. Solicitar recuperación (envía código al email)
 export const requestPasswordResetService = async (email) => {
   const user = await User.findOne({ email, isDeleted: false });
   if (!user) throw new Error("Usuario no encontrado");
 
-  // Generar código de 6 dígitos (similar a verificationCode)
   const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
-  const resetCodeExpires = new Date(Date.now() + 3600000); // 1 hora de expiración
+  const resetCodeExpires = new Date(Date.now() + 3600000);
 
   user.passwordResetCode = resetCode;
   user.passwordResetExpires = resetCodeExpires;
   await user.save();
 
-  // Enviar email (usa tu función existente o crea una nueva)
   await sendPasswordResetEmail({
     to: user.email,
     name: user.name,
@@ -146,12 +137,11 @@ export const requestPasswordResetService = async (email) => {
   };
 };
 
-// 2. Verificar código de recuperación
 export const verifyResetCodeService = async (email, code) => {
   const user = await User.findOne({
     email,
     passwordResetCode: code,
-    passwordResetExpires: { $gt: new Date() }, // Código no expirado
+    passwordResetExpires: { $gt: new Date() },
     isDeleted: false,
   });
 
@@ -162,7 +152,6 @@ export const verifyResetCodeService = async (email, code) => {
   };
 };
 
-// 3. Actualizar contraseña
 export const resetPasswordService = async (email, code, newPassword) => {
   const user = await User.findOne({
     email,
@@ -173,7 +162,6 @@ export const resetPasswordService = async (email, code, newPassword) => {
 
   if (!user) throw new Error("Código inválido o expirado");
 
-  // Actualizar contraseña (hash) y limpiar código
   user.password = await bcrypt.hash(newPassword, 10);
   user.passwordResetCode = null;
   user.passwordResetExpires = null;

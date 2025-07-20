@@ -22,7 +22,7 @@ export const getAllProjects = async (req, res) => {
 
 export const getProjectById = async (req, res) => {
   try {
-    const { projectId } = req.body; // Cambiado de req.query a req.body
+    const { projectId } = req.body;
     const project = await getProjectByIdService(projectId);
 
     if (!project) {
@@ -63,7 +63,7 @@ export const updateProject = async (req, res) => {
 
 export const deleteProject = [
   verifyToken,
-  authorizeRoles("admin", "manager"), // Solo roles autorizados
+  authorizeRoles("admin", "manager"),
   async (req, res) => {
     try {
       const { projectId, deleteType = "soft" } = req.body;

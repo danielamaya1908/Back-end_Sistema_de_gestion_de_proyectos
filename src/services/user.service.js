@@ -1,4 +1,3 @@
-// services/user.service.js
 import bcrypt from "bcryptjs";
 import { User } from "../models/User.js";
 import { Task } from "../models/Task.js";
@@ -15,10 +14,8 @@ export const getAllUsersService = async (filters) => {
   } = filters;
 
   const skip = (page - 1) * limit;
-
   const query = {};
 
-  // 🔍 Búsqueda por nombre o correo
   if (search && typeof search === "string") {
     query.$or = [
       { name: { $regex: search, $options: "i" } },
@@ -26,14 +23,12 @@ export const getAllUsersService = async (filters) => {
     ];
   }
 
-  // 🎯 Filtros dinámicos
   for (const key in restFilters) {
     if (restFilters[key] !== undefined && restFilters[key] !== "") {
       query[key] = restFilters[key];
     }
   }
 
-  // 🧭 Ordenamiento flexible
   const sortOption = {};
   if (sortBy) {
     sortOption[sortBy] = sortOrder === "asc" ? 1 : -1;
@@ -105,7 +100,6 @@ export const updateUserService = async (id, updates) => {
   }
 
   Object.assign(user, updates);
-
   await user.save();
 
   return {
@@ -122,18 +116,16 @@ export const deleteUserService = async (userId, deleteType = "soft") => {
   if (!user) throw new Error("Usuario no encontrado");
 
   if (deleteType === "hard") {
-    // Hard delete: Eliminación física del usuario y sus dependencias
     await Promise.all([
       User.findByIdAndDelete(userId),
-      Task.deleteMany({ $or: [{ assignedTo: userId }, { createdBy: userId }] }), // Tareas asignadas o creadas
+      Task.deleteMany({ $or: [{ assignedTo: userId }, { createdBy: userId }] }),
       Project.updateMany(
         { $or: [{ managerId: userId }, { developersIds: userId }] },
-        { $pull: { developersIds: userId } } // Elimina al usuario de los proyectos
+        { $pull: { developersIds: userId } }
       ),
     ]);
     return { method: "hard" };
   } else {
-    // Soft delete: Marca como eliminado
     user.isDeleted = true;
     await user.save();
     return { method: "soft" };
