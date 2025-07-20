@@ -25,71 +25,8 @@ const router = Router();
  *   description: Endpoints de autenticación
  */
 
-/**
- * @swagger
- * /api/auth/login:
- *   post:
- *     summary: Iniciar sesión
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - email
- *               - password
- *             properties:
- *               email:
- *                 type: string
- *                 format: email
- *                 example: user@example.com
- *               password:
- *                 type: string
- *                 example: "123456"
- *     responses:
- *       200:
- *         description: Sesión iniciada correctamente
- *       400:
- *         description: Credenciales inválidas
- */
 router.post("/login", validateLogin, handleValidationErrors, loginUser);
 
-/**
- * @swagger
- * /api/auth/register:
- *   post:
- *     summary: Registrar nuevo usuario
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - name
- *               - email
- *               - password
- *             properties:
- *               name:
- *                 type: string
- *                 example: "Juan Pérez"
- *               email:
- *                 type: string
- *                 format: email
- *                 example: user@example.com
- *               password:
- *                 type: string
- *                 minLength: 6
- *                 example: "123456"
- *     responses:
- *       201:
- *         description: Usuario registrado exitosamente
- *       400:
- *         description: Datos de registro inválidos
- */
 router.post(
   "/register",
   validateRegister,
@@ -97,11 +34,15 @@ router.post(
   registerUser
 );
 
+router.post("/refresh-token", refreshToken);
+
+router.get("/profile", verifyToken, getProfile);
+
 /**
  * @swagger
- * /api/auth/refresh-token:
+ * /api/auth/verify:
  *   post:
- *     summary: Refrescar token de acceso
+ *     summary: Verificar cuenta de usuario
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -110,33 +51,22 @@ router.post(
  *           schema:
  *             type: object
  *             required:
- *               - refreshToken
+ *               - email
+ *               - verificationCode
  *             properties:
- *               refreshToken:
+ *               email:
  *                 type: string
+ *                 format: email
+ *               verificationCode:
+ *                 type: string
+ *                 example: "ABC123"
  *     responses:
  *       200:
- *         description: Nuevo token generado
- *       401:
- *         description: Token de refresco inválido
+ *         description: Usuario verificado exitosamente
+ *       400:
+ *         description: Código inválido o expirado
  */
-router.post("/refresh-token", refreshToken);
-
-/**
- * @swagger
- * /api/auth/profile:
- *   get:
- *     summary: Obtener perfil de usuario
- *     tags: [Auth]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Perfil del usuario
- *       401:
- *         description: No autorizado
- */
-router.get("/profile", verifyToken, getProfile);
+router.post("/verify", verifyUser);
 
 /**
  * @swagger
@@ -161,5 +91,66 @@ router.get("/profile", verifyToken, getProfile);
  *         description: Código de verificación enviado
  */
 router.post("/password/reset-request", requestPasswordReset);
+
+/**
+ * @swagger
+ * /api/auth/password/verify-code:
+ *   post:
+ *     summary: Verificar código de restablecimiento
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - code
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               code:
+ *                 type: string
+ *                 example: "123456"
+ *     responses:
+ *       200:
+ *         description: Código verificado correctamente
+ *       400:
+ *         description: Código inválido o expirado
+ */
+router.post("/password/verify-code", verifyResetCode);
+
+/**
+ * @swagger
+ * /api/auth/password/reset:
+ *   post:
+ *     summary: Restablecer contraseña
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - newPassword
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               newPassword:
+ *                 type: string
+ *                 minLength: 6
+ *                 example: "nuevaClave123"
+ *     responses:
+ *       200:
+ *         description: Contraseña restablecida correctamente
+ *       400:
+ *         description: Error al restablecer la contraseña
+ */
+router.post("/password/reset", resetPassword);
 
 export default router;
