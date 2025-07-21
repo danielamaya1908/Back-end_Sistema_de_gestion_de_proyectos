@@ -53,7 +53,7 @@ export const getAllTasks = async (req, res) => {
 
 export const getProjectTasks = async (req, res) => {
   try {
-    const { projectId } = req.body;
+    const { projectId } = req.query;
     if (!projectId) throw new Error("projectId es requerido");
 
     const tasks = await getTasksByProjectService(projectId);
