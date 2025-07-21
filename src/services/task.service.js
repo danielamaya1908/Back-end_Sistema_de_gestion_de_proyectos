@@ -26,33 +26,40 @@ export const getAllTasksService = async (filters = {}) => {
   const skip = (page - 1) * limit;
   const query = { isDeleted: { $ne: true } };
 
-  if (search) {
+  // Búsqueda por texto
+  if (search && typeof search === "string") {
     query.$or = [
       { title: { $regex: search, $options: "i" } },
       { description: { $regex: search, $options: "i" } },
     ];
   }
 
+  // Filtros básicos
   if (status) query.status = status;
   if (priority) query.priority = priority;
   if (assignedTo) query.assignedTo = assignedTo;
   if (projectId) query.projectId = projectId;
   if (createdBy) query.createdBy = createdBy;
 
+  // Horas estimadas
   if (estimatedHoursMin || estimatedHoursMax) {
     query.estimatedHours = {};
-    if (estimatedHoursMin)
+    if (estimatedHoursMin !== undefined && estimatedHoursMin !== "")
       query.estimatedHours.$gte = Number(estimatedHoursMin);
-    if (estimatedHoursMax)
+    if (estimatedHoursMax !== undefined && estimatedHoursMax !== "")
       query.estimatedHours.$lte = Number(estimatedHoursMax);
   }
 
+  // Horas reales
   if (actualHoursMin || actualHoursMax) {
     query.actualHours = {};
-    if (actualHoursMin) query.actualHours.$gte = Number(actualHoursMin);
-    if (actualHoursMax) query.actualHours.$lte = Number(actualHoursMax);
+    if (actualHoursMin !== undefined && actualHoursMin !== "")
+      query.actualHours.$gte = Number(actualHoursMin);
+    if (actualHoursMax !== undefined && actualHoursMax !== "")
+      query.actualHours.$lte = Number(actualHoursMax);
   }
 
+  // Fecha de entrega
   if (dueDateStart || dueDateEnd) {
     query.dueDate = {};
     if (dueDateStart) query.dueDate.$gte = new Date(dueDateStart);

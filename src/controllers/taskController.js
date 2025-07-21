@@ -29,14 +29,18 @@ export const getAllTasks = async (req, res) => {
       "dueDateEnd",
     ];
 
-    const filteredBody = {};
-    Object.keys(req.body).forEach((key) => {
-      if (validFilters.includes(key)) {
-        filteredBody[key] = req.body[key];
-      }
-    });
+    // Unificamos body + query
+    const source = { ...req.body, ...req.query };
+    const filters = {};
 
-    const result = await getAllTasksService(filteredBody);
+    for (const key of validFilters) {
+      const value = source[key];
+      if (value !== undefined && value !== "") {
+        filters[key] = value;
+      }
+    }
+
+    const result = await getAllTasksService(filters);
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json({
