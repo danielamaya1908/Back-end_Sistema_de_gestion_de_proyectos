@@ -44,7 +44,7 @@ export const getAllUsersService = async (filters) => {
   ]);
 
   return {
-    users,
+    data: users, // <-- cambio aquí
     total,
     page,
     limit,
