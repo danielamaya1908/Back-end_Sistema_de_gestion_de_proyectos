@@ -88,7 +88,7 @@ Explora la API completa con **Swagger UI**:
 
 ```bash
 # 1. Clonar repositorio
-git clone https://github.com/tu-usuario/gestion-proyectos.git
+git clone https://github.com/danielamaya1908/Back-end_Sistema_de_gestion_de_proyectos.git
 cd gestion-proyectos
 
 # 2. Instalar dependencias
